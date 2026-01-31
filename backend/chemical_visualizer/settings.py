@@ -5,18 +5,14 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'jxw%3_kqee61bzpm$n4raouen7ooh&qnsx5#d_*v)m5imvn6xx')
 
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-# Allow all hosts to prevent networking crashes on Railway
 ALLOWED_HOSTS = ['*']
 
-# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -61,13 +57,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'chemical_visualizer.wsgi.application'
 
-# --- SAFE DATABASE CONFIGURATION ---
-# This checks if DATABASE_URL actually has text before trying to use it.
-DATABASE_URL = os.getenv('DATABASE_URL')
+# --- DATABASE CONFIG: FORCED FALLBACK ---
+# This ignores DATABASE_URL if it's empty or just whitespace
+db_env = os.getenv('DATABASE_URL', '').strip()
 
-if DATABASE_URL:
+if db_env:
     DATABASES = {
-        'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600)
+        'default': dj_database_url.config(default=db_env, conn_max_age=600)
     }
 else:
     DATABASES = {
@@ -77,7 +73,6 @@ else:
         }
     }
 
-# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -85,25 +80,20 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# Simplified static storage to avoid Manifest errors during first deploy
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CORS settings
 CORS_ALLOW_ALL_ORIGINS = True 
 CORS_ALLOW_CREDENTIALS = True
 
-# REST Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
