@@ -1,1 +1,0 @@
-web: gunicorn chemical_visualizer.wsgi --log-file -
