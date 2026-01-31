@@ -6,7 +6,7 @@ import './App.css';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = 'https://fossee-hybrid-web-desktop-application-production.up.railway.app/api/';
 
 function App() {
   const [datasets, setDatasets] = useState([]);
